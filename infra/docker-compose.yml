@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: activity
+      POSTGRES_PASSWORD: activitypass
+      POSTGRES_DB: activitydb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  auth-service:
+    build:
+      context: ../auth-service
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/activitydb
+      SPRING_DATASOURCE_USERNAME: activity
+      SPRING_DATASOURCE_PASSWORD: activitypass
+    ports:
+      - "8081:8081"
+
+volumes:
+  pgdata:
