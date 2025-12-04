@@ -9,7 +9,10 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "5435:5432"
+    profiles:
+      - local-db
+      - full   # optional: DB zawsze potrzebna
 
   auth-service:
     build:
@@ -23,6 +26,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: activitypass
     ports:
       - "8081:8081"
+    profiles:
+      - full   # <--- URUCHOMI SIĘ TYLKO GDY UŻYJESZ --profile full
 
 volumes:
   pgdata:
